@@ -1,23 +1,19 @@
 class Console
   INITIAL_STATE = :greeting
-  STATES = %i[
-      greeting
-      choose_base_option
-      create
-      load
-      main_menu
-    ].freeze
+  STATES = %i[greeting choose_base_option create load main_menu].freeze
 
   def initialize
     @state = INITIAL_STATE
   end
 
   def console
-    loop do
-      break unless STATES.include?(@state)
+    loop { process_state(@state) }
+  end
 
-      public_send(@state)
-    end
+  def process_state(state)
+    exit unless STATES.include?(state)
+
+    public_send(state)
   end
 
   def greeting
@@ -31,12 +27,12 @@ class Console
              when 'create' then :create
              when 'load' then :load
              when 'exit' then :exit # for debug
-             # else :exit
+               # else :exit
              end
   end
 
   def create
-    puts "Something is created"
+    puts 'Something is created'
     @state = :main_menu
   end
 
